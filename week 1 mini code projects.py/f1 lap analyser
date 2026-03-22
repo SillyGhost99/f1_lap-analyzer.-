@@ -1,0 +1,80 @@
+# ============================================================
+#  F1 LAP TIME ANALYZER
+#  Day 01 — GitHub Calendar Journey
+#  Author: Giogio
+# ============================================================
+#
+#  This script stores F1 driver lap times and calculates:
+#    - Fastest lap per driver
+#    - Average lap time
+#    - Gap to the fastest driver overall
+#
+#  Built with: pure Python (no libraries needed)
+# ============================================================
+
+
+# --- DATA ---
+# Each driver has a list of lap times (in seconds)
+drivers = {
+    "Max Verstappen":   [83.4, 82.9, 83.1, 82.7, 83.0],
+    "Lewis Hamilton":   [83.8, 83.5, 83.7, 83.6, 83.4],
+    "Charles Leclerc":  [84.0, 83.9, 83.6, 83.8, 84.1],
+    "Lando Norris":     [83.5, 83.3, 83.4, 83.2, 83.6],
+    "Carlos Sainz":     [84.2, 84.0, 83.9, 84.1, 84.3],
+}
+
+
+# --- FUNCTIONS ---
+
+def fastest_lap(times):
+    """Returns the quickest lap time from a list."""
+    return min(times)
+
+def average_lap(times):
+    """Returns the average lap time, rounded to 3 decimal places."""
+    return round(sum(times) / len(times), 3)
+
+def format_time(seconds):
+    """Converts raw seconds into a clean MM:SS.mmm string."""
+    minutes = int(seconds // 60)
+    remaining = seconds % 60
+    return f"{minutes}:{remaining:06.3f}"
+
+
+# --- MAIN LOGIC ---
+
+def analyze():
+    print("\n" + "=" * 55)
+    print("  🏁  F1 LAP TIME ANALYZER  🏁")
+    print("=" * 55)
+    print(f"  {'DRIVER':<22} {'FASTEST':>10} {'AVERAGE':>10}")
+    print("-" * 55)
+
+    # Find the absolute fastest lap across all drivers (pole benchmark)
+    pole_time = min(fastest_lap(times) for times in drivers.values())
+
+    results = []
+    for driver, times in drivers.items():
+        fl = fastest_lap(times)
+        avg = average_lap(times)
+        gap = round(fl - pole_time, 3)
+        results.append((driver, fl, avg, gap))
+
+    # Sort by fastest lap (ascending)
+    results.sort(key=lambda x: x[1])
+
+    for i, (driver, fl, avg, gap) in enumerate(results):
+        position = f"P{i + 1}"
+        gap_str = "POLE" if gap == 0 else f"+{gap:.3f}s"
+        print(f"  {position}  {driver:<20} {format_time(fl):>10}  {gap_str:>8}")
+
+    print("=" * 55)
+    print(f"\n  🏆  Pole Position: {results[0][0]}")
+    print(f"      Lap Time:      {format_time(results[0][1])}")
+    print(f"      Average:       {format_time(results[0][2])}")
+    print("\n" + "=" * 55)
+
+
+# --- ENTRY POINT ---
+if __name__ == "__main__":
+    analyze()
