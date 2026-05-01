@@ -1,0 +1,1 @@
+\\this Repository is purely data analytics based for Motorsports category and potentially for aerospace aswell.
