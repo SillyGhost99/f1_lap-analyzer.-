@@ -1,0 +1,772 @@
+"""
+╔══════════════════════════════════════════════════════════════════════════════╗
+║         2026 FORMULA 1 — RACE TRACK SIMULATION DATA INDEX                  ║
+║         Style: Textbook Syllabus / Chapter Catalog                         ║
+║         Circuits: 24  |  Season: 2026                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+"""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CIRCUIT DATABASE  (one dict per circuit = one chapter)
+# ─────────────────────────────────────────────────────────────────────────────
+CIRCUITS = [
+    {
+        "ch": 1,
+        "name": "Albert Park Circuit",
+        "country": "Australia", "city": "Melbourne",
+        "type": "Street/Hybrid",
+        "length_km": 5.278, "corners": 14,
+        "direction": "Clockwise",
+        "speed_profile": "Medium-High",
+        "key_traits": ["Fast flowing sections", "Heavy braking zones", "Low grip surface"],
+        "overtaking": "Medium",
+        "tire_wear": "Medium",
+        "race_style": "Safety-car prone, rhythm-based",
+        "sim_notes": "Slipstream-heavy, street-circuit narrowness",
+        "tags": ["top-speed track", "braking track"],
+        "summary": "Fast-flowing street/hybrid circuit; unpredictable safety cars make strategy critical.",
+    },
+    {
+        "ch": 2,
+        "name": "Bahrain International Circuit",
+        "country": "Bahrain", "city": "Sakhir",
+        "type": "Permanent",
+        "length_km": 5.412, "corners": 15,
+        "direction": "Clockwise",
+        "speed_profile": "Medium",
+        "key_traits": ["Long straights", "Heavy braking zones", "Sand/dust on track", "Traction-limited exits"],
+        "overtaking": "Easy",
+        "tire_wear": "High",
+        "race_style": "Strategic, tire-degradation focused",
+        "sim_notes": "Traction-heavy, tire-degradation track",
+        "tags": ["tire-degradation track", "braking track"],
+        "summary": "Permanent desert circuit; tire management and DRS battles define the race.",
+    },
+    {
+        "ch": 3,
+        "name": "Jeddah Corniche Circuit",
+        "country": "Saudi Arabia", "city": "Jeddah",
+        "type": "Street",
+        "length_km": 6.174, "corners": 27,
+        "direction": "Anti-clockwise",
+        "speed_profile": "High",
+        "key_traits": ["Fastest street circuit", "Blind apexes", "Minimal runoff", "Walls everywhere"],
+        "overtaking": "Medium",
+        "tire_wear": "Low",
+        "race_style": "Qualifying-dependent, safety-car prone",
+        "sim_notes": "Precision-heavy, street-circuit narrowness, slipstream-heavy on straights",
+        "tags": ["top-speed track", "downforce track"],
+        "summary": "World's fastest street circuit; precision and bravery over raw overtaking.",
+    },
+    {
+        "ch": 4,
+        "name": "Shanghai International Circuit",
+        "country": "China", "city": "Shanghai",
+        "type": "Permanent",
+        "length_km": 5.451, "corners": 16,
+        "direction": "Clockwise",
+        "speed_profile": "Medium",
+        "key_traits": ["Long back straight", "Hairpin S-bends", "Heavy braking zones", "High traction demand"],
+        "overtaking": "Medium",
+        "tire_wear": "Medium",
+        "race_style": "Strategic, rhythm-based",
+        "sim_notes": "Traction-heavy, slipstream-heavy on main straight",
+        "tags": ["braking track", "tire-degradation track"],
+        "summary": "Technical Tilke circuit with long straight enabling DRS overtakes into T14.",
+    },
+    {
+        "ch": 5,
+        "name": "Suzuka Circuit",
+        "country": "Japan", "city": "Suzuka",
+        "type": "Permanent",
+        "length_km": 5.807, "corners": 18,
+        "direction": "Clockwise (figure-of-8 layout)",
+        "speed_profile": "High",
+        "key_traits": ["Figure-of-8 overpass", "130R", "Esses sequence", "Spoon curve", "Degner curves"],
+        "overtaking": "Hard",
+        "tire_wear": "Medium",
+        "race_style": "Qualifying-dependent, rhythm-based",
+        "sim_notes": "Precision-heavy, downforce-sensitive",
+        "tags": ["downforce track", "top-speed track"],
+        "summary": "Legendary driver's circuit; qualifying lap defines race result; low overtaking.",
+    },
+    {
+        "ch": 6,
+        "name": "Miami International Autodrome",
+        "country": "USA", "city": "Miami Gardens",
+        "type": "Street/Hybrid",
+        "length_km": 5.412, "corners": 19,
+        "direction": "Clockwise",
+        "speed_profile": "Medium",
+        "key_traits": ["Tight hairpins", "Long straight", "Technical infield", "Heavy braking into T1"],
+        "overtaking": "Medium",
+        "tire_wear": "Medium",
+        "race_style": "Safety-car prone, strategic",
+        "sim_notes": "Street-circuit narrowness, slipstream on main straight",
+        "tags": ["braking track"],
+        "summary": "Urban-style permanent hybrid; DRS zone enables overtaking but tight infield frustrates.",
+    },
+    {
+        "ch": 7,
+        "name": "Circuit de Monaco",
+        "country": "Monaco", "city": "Monte Carlo",
+        "type": "Street",
+        "length_km": 3.337, "corners": 19,
+        "direction": "Clockwise",
+        "speed_profile": "Low",
+        "key_traits": ["Hairpin (Casino/Loews)", "Tunnel section", "Elevation changes", "Zero runoff", "Narrow lanes"],
+        "overtaking": "Hard",
+        "tire_wear": "Low",
+        "race_style": "Qualifying-dependent, safety-car prone",
+        "sim_notes": "Precision-heavy, street-circuit narrowness",
+        "tags": ["downforce track"],
+        "summary": "Iconic street circuit; race won in qualifying; overtaking nearly impossible.",
+    },
+    {
+        "ch": 8,
+        "name": "Circuit de Barcelona-Catalunya",
+        "country": "Spain", "city": "Barcelona",
+        "type": "Permanent",
+        "length_km": 4.657, "corners": 16,
+        "direction": "Clockwise",
+        "speed_profile": "Medium",
+        "key_traits": ["Long T1 complex", "Fast Sector 2", "High-speed corners", "T10 traction zone"],
+        "overtaking": "Hard",
+        "tire_wear": "High",
+        "race_style": "Qualifying-dependent, strategic",
+        "sim_notes": "Precision-heavy, tire-degradation heavy",
+        "tags": ["downforce track", "tire-degradation track"],
+        "summary": "Well-understood permanent track; tire management crucial; few natural overtaking spots.",
+    },
+    {
+        "ch": 9,
+        "name": "Red Bull Ring",
+        "country": "Austria", "city": "Spielberg",
+        "type": "Permanent",
+        "length_km": 4.318, "corners": 10,
+        "direction": "Clockwise",
+        "speed_profile": "High",
+        "key_traits": ["Elevation changes", "Short lap", "Heavy braking into T3/T4", "Fast run to T1"],
+        "overtaking": "Easy",
+        "tire_wear": "Medium",
+        "race_style": "Rhythm-based, strategic",
+        "sim_notes": "Slipstream-heavy, braking track",
+        "tags": ["top-speed track", "braking track"],
+        "summary": "Short, punchy Austrian track; elevation and DRS make overtaking accessible.",
+    },
+    {
+        "ch": 10,
+        "name": "Silverstone Circuit",
+        "country": "United Kingdom", "city": "Northamptonshire",
+        "type": "Permanent",
+        "length_km": 5.891, "corners": 18,
+        "direction": "Clockwise",
+        "speed_profile": "High",
+        "key_traits": ["Maggots/Becketts complex", "Copse corner", "Long fast sweepers", "High downforce demand"],
+        "overtaking": "Medium",
+        "tire_wear": "High",
+        "race_style": "Rhythm-based, qualifying-dependent",
+        "sim_notes": "Precision-heavy, slipstream on Hangar straight",
+        "tags": ["top-speed track", "downforce track", "tire-degradation track"],
+        "summary": "High-speed British classic; Maggots-Becketts is the ultimate driver challenge.",
+    },
+    {
+        "ch": 11,
+        "name": "Circuit Gilles-Villeneuve",
+        "country": "Canada", "city": "Montreal",
+        "type": "Street/Hybrid",
+        "length_km": 4.361, "corners": 14,
+        "direction": "Clockwise",
+        "speed_profile": "Medium-High",
+        "key_traits": ["Wall of Champions (T13)", "Long back straight", "Chicanes", "Heavy braking"],
+        "overtaking": "Easy",
+        "tire_wear": "Low",
+        "race_style": "Safety-car prone, strategic",
+        "sim_notes": "Slipstream-heavy, street-circuit narrowness at chicanes",
+        "tags": ["braking track", "top-speed track"],
+        "summary": "Island street/hybrid circuit; safety cars common; Wall of Champions claims victims yearly.",
+    },
+    {
+        "ch": 12,
+        "name": "Circuit de Spa-Francorchamps",
+        "country": "Belgium", "city": "Stavelot",
+        "type": "Permanent",
+        "length_km": 7.004, "corners": 19,
+        "direction": "Clockwise",
+        "speed_profile": "High",
+        "key_traits": ["Eau Rouge/Raidillon", "Kemmel Straight", "Pouhon", "Elevation changes", "Variable weather"],
+        "overtaking": "Easy",
+        "tire_wear": "Medium",
+        "race_style": "Strategic, safety-car prone",
+        "sim_notes": "Slipstream-heavy, precision-heavy at Eau Rouge",
+        "tags": ["top-speed track", "downforce track"],
+        "summary": "Longest circuit; Eau Rouge defines bravery; Kemmel straight enables drag races.",
+    },
+    {
+        "ch": 13,
+        "name": "Hungaroring",
+        "country": "Hungary", "city": "Budapest",
+        "type": "Permanent",
+        "length_km": 4.381, "corners": 14,
+        "direction": "Clockwise",
+        "speed_profile": "Low-Medium",
+        "key_traits": ["Tight twisty layout", "Heavy downforce", "Low top speed", "Traction-limited corners"],
+        "overtaking": "Hard",
+        "tire_wear": "Medium",
+        "race_style": "Qualifying-dependent, strategic",
+        "sim_notes": "Precision-heavy, traction-heavy",
+        "tags": ["downforce track"],
+        "summary": "Monaco without walls; twisty layout suppresses overtaking; strategy often decides result.",
+    },
+    {
+        "ch": 14,
+        "name": "Circuit Zandvoort",
+        "country": "Netherlands", "city": "Zandvoort",
+        "type": "Permanent",
+        "length_km": 4.259, "corners": 14,
+        "direction": "Clockwise",
+        "speed_profile": "Medium",
+        "key_traits": ["Banked Hugenholtz", "Banked final corner", "Tight chicane", "Sand dunes elevation"],
+        "overtaking": "Hard",
+        "tire_wear": "Medium",
+        "race_style": "Qualifying-dependent, rhythm-based",
+        "sim_notes": "Precision-heavy, traction-heavy on exits",
+        "tags": ["downforce track"],
+        "summary": "Narrow Dutch dunes circuit; unique banking; overtaking very difficult without undercut.",
+    },
+    {
+        "ch": 15,
+        "name": "Autodromo Nazionale Monza",
+        "country": "Italy", "city": "Monza",
+        "type": "Permanent",
+        "length_km": 5.793, "corners": 11,
+        "direction": "Clockwise",
+        "speed_profile": "High",
+        "key_traits": ["Lesmo curves", "Ascari chicane", "Parabolica", "Minimum downforce setup", "Long straights"],
+        "overtaking": "Easy",
+        "tire_wear": "Low",
+        "race_style": "Qualifying-dependent, slipstream-based",
+        "sim_notes": "Slipstream-heavy, top-speed focused",
+        "tags": ["top-speed track"],
+        "summary": "Temple of Speed; lowest downforce on calendar; slipstream trains every lap.",
+    },
+    {
+        "ch": 16,
+        "name": "Ifema Madrid Circuit",
+        "country": "Spain", "city": "Madrid",
+        "type": "Street/Hybrid",
+        "length_km": 5.474, "corners": 20,
+        "direction": "Anti-clockwise",
+        "speed_profile": "Medium-High",
+        "key_traits": ["New 2026 venue", "Mix of fast and slow corners", "Urban infrastructure sections", "Multiple DRS zones"],
+        "overtaking": "Medium",
+        "tire_wear": "Medium",
+        "race_style": "Strategic, safety-car prone",
+        "sim_notes": "Street-circuit narrowness, slipstream on main straight (approx.)",
+        "tags": ["braking track"],
+        "summary": "New 2026 addition in Madrid; anti-clockwise street/hybrid layout with multiple DRS zones.",
+    },
+    {
+        "ch": 17,
+        "name": "Baku City Circuit",
+        "country": "Azerbaijan", "city": "Baku",
+        "type": "Street",
+        "length_km": 6.003, "corners": 20,
+        "direction": "Anti-clockwise",
+        "speed_profile": "High",
+        "key_traits": ["1.9 km main straight", "Narrow old-city section", "Castle walls hairpin", "Heavy braking T1"],
+        "overtaking": "Easy",
+        "tire_wear": "Low",
+        "race_style": "Safety-car prone, strategic",
+        "sim_notes": "Slipstream-heavy, street-circuit narrowness, precision-heavy in old city",
+        "tags": ["top-speed track", "braking track"],
+        "summary": "Longest straight on calendar; unpredictable safety cars; chaos at T1 every race.",
+    },
+    {
+        "ch": 18,
+        "name": "Marina Bay Street Circuit",
+        "country": "Singapore", "city": "Singapore",
+        "type": "Street",
+        "length_km": 4.940, "corners": 19,
+        "direction": "Anti-clockwise",
+        "speed_profile": "Low-Medium",
+        "key_traits": ["Night race", "Tight walls", "High humidity", "Frequent safety cars", "Traction-limited exits"],
+        "overtaking": "Hard",
+        "tire_wear": "Medium",
+        "race_style": "Safety-car prone, strategic",
+        "sim_notes": "Precision-heavy, street-circuit narrowness, traction-heavy",
+        "tags": ["downforce track"],
+        "summary": "Night street circuit; safety car almost guaranteed; precision and strategy dominate.",
+    },
+    {
+        "ch": 19,
+        "name": "Circuit of the Americas",
+        "country": "USA", "city": "Austin",
+        "type": "Permanent",
+        "length_km": 5.513, "corners": 20,
+        "direction": "Anti-clockwise",
+        "speed_profile": "Medium-High",
+        "key_traits": ["T1 elevation climb", "Esses", "Long back straight", "Stadium section"],
+        "overtaking": "Medium",
+        "tire_wear": "High",
+        "race_style": "Strategic, rhythm-based",
+        "sim_notes": "Traction-heavy, precision-heavy at Esses",
+        "tags": ["downforce track", "tire-degradation track", "braking track"],
+        "summary": "Americas flagship circuit; T1 elevation is iconic; tire degradation limits strategy.",
+    },
+    {
+        "ch": 20,
+        "name": "Autodromo Hermanos Rodriguez",
+        "country": "Mexico", "city": "Mexico City",
+        "type": "Permanent",
+        "length_km": 4.304, "corners": 17,
+        "direction": "Clockwise",
+        "speed_profile": "High",
+        "key_traits": ["High altitude (2200m)", "Foro Sol stadium section", "Low aero efficiency", "Long main straight"],
+        "overtaking": "Easy",
+        "tire_wear": "Low",
+        "race_style": "Strategic, qualifying-dependent",
+        "sim_notes": "Slipstream-heavy, altitude reduces downforce significantly",
+        "tags": ["top-speed track"],
+        "summary": "Highest-altitude circuit; thin air kills downforce; long straight compensates with top speed.",
+    },
+    {
+        "ch": 21,
+        "name": "Autodromo Jose Carlos Pace (Interlagos)",
+        "country": "Brazil", "city": "São Paulo",
+        "type": "Permanent",
+        "length_km": 4.309, "corners": 15,
+        "direction": "Anti-clockwise",
+        "speed_profile": "Medium-High",
+        "key_traits": ["Elevation changes", "Subida do Lago climb", "Senna S", "Variable weather", "Overtaking T1/T4"],
+        "overtaking": "Easy",
+        "tire_wear": "Medium",
+        "race_style": "Safety-car prone, strategic",
+        "sim_notes": "Traction-heavy, slipstream-heavy on main straight",
+        "tags": ["braking track", "top-speed track"],
+        "summary": "Anti-clockwise classic; elevation and weather make it chaotic; brilliant racing guaranteed.",
+    },
+    {
+        "ch": 22,
+        "name": "Las Vegas Strip Circuit",
+        "country": "USA", "city": "Las Vegas",
+        "type": "Street",
+        "length_km": 6.201, "corners": 17,
+        "direction": "Anti-clockwise",
+        "speed_profile": "High",
+        "key_traits": ["Las Vegas Boulevard straight (~2km)", "Night race", "Cold track temperatures", "Low grip asphalt"],
+        "overtaking": "Easy",
+        "tire_wear": "Low",
+        "race_style": "Qualifying-dependent, slipstream-based",
+        "sim_notes": "Slipstream-heavy, top-speed focused, cold tires = precision required",
+        "tags": ["top-speed track", "braking track"],
+        "summary": "Night street race on The Strip; one of the longest straights; cold temps cause tire chaos.",
+    },
+    {
+        "ch": 23,
+        "name": "Lusail International Circuit",
+        "country": "Qatar", "city": "Lusail",
+        "type": "Permanent",
+        "length_km": 5.419, "corners": 16,
+        "direction": "Clockwise",
+        "speed_profile": "High",
+        "key_traits": ["High-speed sweepers", "Minimal slow corners", "High downforce demand", "Hot night race"],
+        "overtaking": "Medium",
+        "tire_wear": "High",
+        "race_style": "Qualifying-dependent, tire-degradation focused",
+        "sim_notes": "Precision-heavy, traction-heavy",
+        "tags": ["downforce track", "tire-degradation track"],
+        "summary": "MotoGP-origin circuit; high-speed flowing layout punishes tire blister aggressively.",
+    },
+    {
+        "ch": 24,
+        "name": "Yas Marina Circuit",
+        "country": "UAE", "city": "Abu Dhabi",
+        "type": "Permanent",
+        "length_km": 5.281, "corners": 16,
+        "direction": "Clockwise",
+        "speed_profile": "Medium-High",
+        "key_traits": ["Revised 2021 layout", "Long back straight", "Marina hotel section", "Mixed high/low speed"],
+        "overtaking": "Medium",
+        "tire_wear": "Medium",
+        "race_style": "Strategic, rhythm-based",
+        "sim_notes": "Slipstream-heavy after 2021 revision",
+        "tags": ["top-speed track"],
+        "summary": "Season finale; revised layout improved racing; twilight/night setting makes it visually unique.",
+    },
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TRACK ASCII ART  (keyed by chapter number)
+# Each layout is ~9 lines × 32 chars — schematic, not to scale
+# ─────────────────────────────────────────────────────────────────────────────
+TRACK_ART = {
+    1: [
+        "  ╭──S●──────────────────╮  ",
+        "  │   T1↘                │  ",
+        "╭─╯                      │  ",
+        "│    ALBERT PARK         │  ",
+        "│                  T9●   │  ",
+        "│        ╭───────────────╯  ",
+        "╰──╮     │                  ",
+        "   ╰─────╯   (Hybrid/Park) ",
+    ],
+    2: [
+        "  ╭────────────────────╮  ",
+        "  │    ╭────────╮      │  ",
+        "  │    │ inner  │      │  ",
+        "╭─╯ S● ╰────────╯      │  ",
+        "│    BAHRAIN           │  ",
+        "│                  T4● │  ",
+        "╰──────────────────────╯  ",
+        "       (Desert Loop)      ",
+    ],
+    3: [
+        "╭──────────────────────────╮",
+        "│╭─╮╭─╮╭─╮ JEDDAH  S●     │",
+        "││ ││ ││ │ (27 corners)    │",
+        "│╰─╯╰─╯╰─╯  ╭──────────╮  │",
+        "│            │          │  │",
+        "│            │  T27●    │  │",
+        "╰────────────╯          ╰──╯",
+        "  ← Anti-clockwise ←       ",
+    ],
+    4: [
+        "  ╭──────────────────────╮  ",
+        "╭─╯  ╭────────────────╮  │  ",
+        "│    │   ╭──────────╮ │  │  ",
+        "│    │   │  S●      │ │  │  ",
+        "│    │   ╰──────────╯ │  │  ",
+        "│    ╰────────────────╯  │  ",
+        "╰──────────────────────T14●  ",
+        "     (Shanghai Snail)     ",
+    ],
+    5: [
+        "     ╭──Esses──╮         ",
+        "     │╭╮╭╮╭╮   │         ",
+        "╭────╯╰╯╰╯╰╯   ╰────╮   ",
+        "│  S●  Figure-of-8  │   ",
+        "╰──╮  ╭─╳─╮  ╭──────╯   ",
+        "   │  │   │  │130R●     ",
+        "   │  ╰───╯  │          ",
+        "   ╰─Spoon───╯          ",
+    ],
+    6: [
+        "╭──────────────────────────╮",
+        "│ S●         ╭──────────╮  │",
+        "│            │  HARD    │  │",
+        "│  ╭──────╮  │ ROCK STD │  │",
+        "│  │MIAMI │  ╰──╮       │  │",
+        "│  ╰──────╯     ╰───────╯  │",
+        "╰──────────────────────────╯",
+        "   (Stadium + Hybrid)       ",
+    ],
+    7: [
+        "  ╭──S●──Beau Rivage──╮  ",
+        "  │                   │  ",
+        "╭─╯  Casino Sq ●      │  ",
+        "│  ╭────╮             │  ",
+        "│  │Loews│ ←Hairpin   │  ",
+        "│  ╰────╯             │  ",
+        "╰───── Tunnel ────────╯  ",
+        "   MONACO (Clockwise)    ",
+    ],
+    8: [
+        "    ╭──────────────────────╮",
+        "╭───╯ S●  T1              │",
+        "│         BARCELONA        │",
+        "╰──╮  ╭────────────────────╯",
+        "   │  │                     ",
+        "   │  ╰╮  ╭────────────────╮",
+        "   │   ╰──╯ T10● traction  │",
+        "   ╰───────────────────────╯",
+    ],
+    9: [
+        "   ╭──────────────────╮   ",
+        "   │ S●  RED BULL RING│   ",
+        "╭──╯  T1●         ↑elev   ",
+        "│          T3●──────╮      ",
+        "│          T4●      │      ",
+        "╰─────────────── ───╯      ",
+        "  (10 corners / Austria)   ",
+        "  Short & Punchy           ",
+    ],
+    10: [
+        "   ╭──Maggots/Becketts────╮",
+        "   │ ╭╮╭╮╭╮  SILVERSTONE  │",
+        "╭──╯ ╰╯╰╯╰╯  Copse●      │",
+        "│  S●                     │",
+        "│   Hangar Straight ════  │",
+        "│                 Stowe●  │",
+        "╰─────────────────────────╯",
+        "   (High-speed Clockwise)  ",
+    ],
+    11: [
+        "  ╭─────── S● ────────────╮",
+        "  │  GILLES-VILLENEUVE    │",
+        "  │  ═══════ straight ═══ │",
+        "  │   ╭──╮ chicane  ╭──╮  │",
+        "  │   │  ╰──────────╯  │  │",
+        "  │   ╰── WALL T13 ───╯  │",
+        "  ╰──────────────────────╯",
+        "    (Island / Montreal)    ",
+    ],
+    12: [
+        "   ╭────Eau Rouge──────╮  ",
+        "   │   ╱▲              │  ",
+        "╭──╯  ╱  Raidillon     │  ",
+        "│    ╱ SPA-FRANCO      │  ",
+        "│  S●  Kemmel ════════ │  ",
+        "│        Pouhon ●      │  ",
+        "╰──────────────────────╯  ",
+        "   (7.004 km — Longest)   ",
+    ],
+    13: [
+        "  ╭──S●──╮╭──╮╭────╮  ",
+        "  │ T1   ││  ││    │  ",
+        "  │ HUNG ╰╯  ╰╯    │  ",
+        "  │ ARING  ╭──╮    │  ",
+        "  │        │T4│    │  ",
+        "  │        ╰──╯    │  ",
+        "  ╰────────────────╯  ",
+        "  (Tight / Budapest)  ",
+    ],
+    14: [
+        "  ╭──S●────────────────╮  ",
+        "  │  Hugenholtz [bank] │  ",
+        "╭─╯       ZANDVOORT   ╰─╮ ",
+        "│  Tarzan●              │ ",
+        "│  ╭──────────────────╮ │ ",
+        "│  │  final corner    │ │ ",
+        "╰──╯  [banked exit]   ╰─╯ ",
+        "   (Sand Dunes / NL)      ",
+    ],
+    15: [
+        "  ╭──────────────────────╮ ",
+        "  │S● Rettifilo ════════ │ ",
+        "  │╭──╮ chicane  MONZA   │ ",
+        "  ││  ╰──╮ Ascari ╭──╮   │ ",
+        "  │╰─────╯        │  │   │ ",
+        "  │        Lesmo● ╰──╯   │ ",
+        "  │   Parabolica ════════╯ ",
+        "  ╰──── (Temple of Speed) ",
+    ],
+    16: [
+        "╭──────────────────────────╮",
+        "│  MADRID 2026  ← S●       │",
+        "│╭──╮╭──╮╭──╮ Urban sec.  │",
+        "││  ││  ││  │ DRS×3       │",
+        "│╰──╯╰──╯╰──╯   ╭──────╮  │",
+        "│               │      │  │",
+        "╰───────────────╯      ╰──╯",
+        "  ← Anti-clockwise (NEW)   ",
+    ],
+    17: [
+        "╭────────── S● ─────────────╮",
+        "│  ════════ 1.9km ═════════ │",
+        "│           BAKU            │",
+        "│  ╭──╮  Old City narrow    │",
+        "│  │🏰│  Castle hairpin     │",
+        "│  ╰──╯                     │",
+        "╰───────────────────────────╯",
+        "  ← Anti-clockwise (Street) ",
+    ],
+    18: [
+        "╭──S●──────────────────────╮",
+        "│ MARINA BAY  ← night race │",
+        "│ ╭──╮  ╭──╮  ╭──╮  ╭──╮  │",
+        "│ │  │  │  │  │  │  │  │  │",
+        "│ ╰──╯  ╰──╯  ╰──╯  ╰──╯  │",
+        "│  Singapore Street Grid   │",
+        "╰──────────────────────────╯",
+        "   ← Anti-clockwise ←      ",
+    ],
+    19: [
+        "      ▲ T1 (uphill)        ",
+        "  ╭───╯S● COTA  Esses╮╮╮  ",
+        "  │        ╭╮╭╮╭╮    │││  ",
+        "  │   ════ back str  ╰╯╯  ",
+        "  │   ╭─Stadium─╮         ",
+        "  │   │  T12●   │         ",
+        "  ╰───╯         ╰─────────",
+        "   ← Anti-clockwise ←     ",
+    ],
+    20: [
+        "  ╭──S●──────────────────╮ ",
+        "  │  MEXICO CITY 2200m   │ ",
+        "  │  ════ main straight  │ ",
+        "  │    ╭──────────────╮  │ ",
+        "  │    │  Foro Sol    │  │ ",
+        "  │    │  Stadium ●   │  │ ",
+        "  ╰────╯              ╰──╯ ",
+        "     (High Altitude)       ",
+    ],
+    21: [
+        "  ╭── S● ←──────────────╮ ",
+        "  │  ╰─Senna S─╮         │ ",
+        "  │ INTERLAGOS  │         │ ",
+        "  │  ▲ elev.   ╰────╮    │ ",
+        "  │  T1●  ╭─────────╯    │ ",
+        "  │       │             │ ",
+        "  ╰───────╯             │ ",
+        "   ← Anti-clockwise ←   ╯ ",
+    ],
+    22: [
+        "╭─────────────────────────────╮",
+        "│  LAS VEGAS STRIP  S●        │",
+        "│  ════════════════════ ~2km  │",
+        "│  ╭──╮                ╭──╮   │",
+        "│  │T1│  night race    │T7│   │",
+        "│  ╰──╯                ╰──╯   │",
+        "╰─────────────────────────────╯",
+        "  ← Anti-clockwise (Street)   ",
+    ],
+    23: [
+        "   ╭────────────────────╮  ",
+        "╭──╯  LUSAIL  S●        ╰──╮",
+        "│   sweeping high-speed    │",
+        "│  ╭───╮      ╭───╮        │",
+        "│  │   ╰──────╯   │        │",
+        "╰──╯              ╰────────╯",
+        "  (MotoGP origin / Qatar)   ",
+        "  Clockwise flowing layout  ",
+    ],
+    24: [
+        "╭──────────────────────────╮ ",
+        "│ S●  YAS MARINA            │ ",
+        "│ ╭────────────────────╮    │ ",
+        "│ │  ══ Hotel ══  ●    │    │ ",
+        "│ │  (under section)   │    │ ",
+        "│ ╰────────────────────╯    │ ",
+        "│  ════ back straight ════  │ ",
+        "╰──────────── (Abu Dhabi) ──╯ ",
+    ],
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DISPLAY HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+SEP  = "─" * 100
+DSEP = "═" * 100
+
+def header(text: str) -> str:
+    return f"\n{DSEP}\n  {text}\n{DSEP}"
+
+def print_table(circuits: list) -> None:
+    """Print the master summary table."""
+    cols = ["Ch", "Circuit", "Country", "Len(km)", "Cor", "Type", "Speed", "OVT", "Wear", "Summary"]
+    widths = [3, 34, 11, 7, 3, 14, 10, 6, 6, 52]
+    row_fmt = "  ".join(f"{{:<{w}}}" for w in widths)
+    print(header("CHAPTER TABLE — ALL 24 CIRCUITS AT A GLANCE"))
+    print()
+    print(row_fmt.format(*cols))
+    print(SEP)
+    for c in circuits:
+        print(row_fmt.format(
+            str(c["ch"]),
+            c["name"][:34],
+            c["country"][:11],
+            str(c["length_km"]),
+            str(c["corners"]),
+            c["type"][:14],
+            c["speed_profile"][:10],
+            c["overtaking"][:6],
+            c["tire_wear"][:6],
+            c["summary"][:52],
+        ))
+    print()
+
+def _render_side_by_side(data_lines: list, art_lines: list) -> None:
+    """Print data block and ASCII art panel side by side."""
+    art_w   = max(len(l) for l in art_lines) + 2
+    border  = "┌" + "─" * art_w + "┐"
+    bot_bdr = "└" + "─" * art_w + "┘"
+    framed  = [border] + ["│ " + l.ljust(art_w - 2) + " │" for l in art_lines] + [bot_bdr]
+    # Pad both columns to the same height
+    h = max(len(data_lines), len(framed))
+    data_lines  += [""] * (h - len(data_lines))
+    framed      += [""] * (h - len(framed))
+    for dl, fl in zip(data_lines, framed):
+        print(f"  {dl:<52}  {fl}")
+
+
+def print_chapters(circuits: list) -> None:
+    """Print each circuit as a chapter with its ASCII track layout."""
+    print(header("FULL CHAPTER ENTRIES — CIRCUIT-BY-CIRCUIT"))
+    for c in circuits:
+        print(f"\n{SEP}")
+        print(f"  CHAPTER {c['ch']:02d} │ {c['name'].upper()}")
+        print(SEP)
+        traits = " | ".join(c["key_traits"])
+        data_lines = [
+            f"Country/City  : {c['country']} — {c['city']}",
+            f"Circuit Type  : {c['type']}",
+            f"Length        : {c['length_km']} km      Corners: {c['corners']}",
+            f"Direction     : {c['direction']}",
+            f"Speed Profile : {c['speed_profile']}",
+            f"Overtaking    : {c['overtaking']}         Tire Wear: {c['tire_wear']}",
+            f"Race Style    : {c['race_style']}",
+            f"Sim Notes     : {c['sim_notes']}",
+            f"Tags          : {', '.join(c['tags'])}",
+            f"Key Traits    : {traits[:52]}",
+            f"↳ Summary     : {c['summary'][:52]}",
+        ]
+        art = TRACK_ART.get(c["ch"], ["  (layout unavailable)  "])
+        _render_side_by_side(data_lines, art)
+        print()
+
+def print_index(circuits: list) -> None:
+    """Print grouped track index (archetype catalog)."""
+    print(header("TRACK ARCHETYPE INDEX"))
+
+    groups = {
+        "🏙️  Street Circuits": lambda c: "Street" in c["type"],
+        "⚡ High-Speed Circuits": lambda c: "High" in c["speed_profile"],
+        "🔧 Technical / Precision Circuits": lambda c: c["overtaking"] == "Hard",
+        "✅ Overtaking-Friendly Circuits": lambda c: c["overtaking"] == "Easy",
+        "🐢 Low-Speed Precision Circuits": lambda c: "Low" in c["speed_profile"],
+        "🔥 Tire-Degradation Tracks": lambda c: c["tire_wear"] == "High",
+        "🏎️  Top-Speed Tracks": lambda c: "top-speed track" in c["tags"],
+        "⬇️  Maximum Downforce Tracks": lambda c: "downforce track" in c["tags"],
+    }
+
+    for label, predicate in groups.items():
+        matches = [c for c in circuits if predicate(c)]
+        if matches:
+            print(f"\n  {label}")
+            print(f"  {'─' * 60}")
+            for m in matches:
+                print(f"    Ch.{m['ch']:02d}  {m['name']:<38} [{m['country']}]")
+
+def print_stats(circuits: list) -> None:
+    """Quick stats summary."""
+    print(header("QUICK STATS"))
+    total   = len(circuits)
+    avg_len = round(sum(c["length_km"] for c in circuits) / total, 3)
+    avg_cor = round(sum(c["corners"]   for c in circuits) / total, 1)
+    street  = sum(1 for c in circuits if "Street" in c["type"])
+    perm    = sum(1 for c in circuits if c["type"] == "Permanent")
+    print(f"""
+  Total circuits   : {total}
+  Average length   : {avg_len} km
+  Average corners  : {avg_cor}
+  Street/Hybrid    : {street}
+  Permanent        : {perm}
+  Easy overtaking  : {sum(1 for c in circuits if c['overtaking'] == 'Easy')}
+  Hard overtaking  : {sum(1 for c in circuits if c['overtaking'] == 'Hard')}
+  High tire wear   : {sum(1 for c in circuits if c['tire_wear'] == 'High')}
+  Low tire wear    : {sum(1 for c in circuits if c['tire_wear'] == 'Low')}
+""")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN
+# ─────────────────────────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    print_table(CIRCUITS)
+    print_chapters(CIRCUITS)
+    print_index(CIRCUITS)
+    print_stats(CIRCUITS)
+    print(f"\n{DSEP}")
+    print("  END OF 2026 F1 CIRCUIT DATA INDEX")
+    print(DSEP)
