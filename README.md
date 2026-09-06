@@ -1,6 +1,6 @@
 F1-Lab Analysis 📊
 A motorsport data analytics laboratory — lap time analysis, track modeling, and machine learning, built with potential cross-domain applications in aerospace telemetry.
-Overview 📑....
+Overview 📑.......
 
 F1-Lab Analysis is a growing collection of tools, datasets, and models centered around Formula 1 lap time data. The repository combines classical data analysis with applied machine learning to extract insights from lap-by-lap performance — sector times, pace consistency, track characteristics, and predictive modeling of lap times.
 
