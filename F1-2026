@@ -1,0 +1,290 @@
+# F1 2026 Season Archive
+
+A dedicated workspace for analysing the 2026 Formula 1 season: the first year of the new technical regulations. This README is the season's "source of truth": context, rules, teams, how the data is organised, and a running log of insights so the work is still understandable years from now.
+
+> **Snapshot date:** 12 October 2026 (after the Singapore GP weekend, 6 races to go).
+> Items marked **(verify)** come from memory or secondary sources. Check them against the FIA regulations or official F1 data before relying on them in analysis.
+
+---
+
+## 1. Why 2026 matters
+
+2026 is a reset season. Almost everything that shaped 2022-2025 changed at once:
+
+- New power unit rules (electrical power roughly equal to combustion power)
+- Active aerodynamics instead of DRS
+- Smaller, lighter cars
+- Fully sustainable fuel
+- Two new manufacturers entering or returning: Audi (taking over Sauber) and Cadillac (new 11th team)
+- Honda returning as works supplier to Aston Martin, Red Bull building its own PU with Ford, Alpine switching to Mercedes customer engines
+
+The pecking order was shuffled. Mercedes has dominated, a 19-year-old (Kimi Antonelli) leads the championship, and Ferrari has been the main challenger. This is the dataset to study "how a rules reset changes a sport".
+
+---
+
+## 2. Technical regulations: what changed
+
+### 2.1 No DRS, active aero
+
+| Topic | 2022-2025 | 2026 |
+|---|---|---|
+| Overtaking aid | DRS flap, only for car within 1s, in DRS zones | No DRS. Active aero on **front and rear wings**, available to all cars in designated zones |
+| Aero modes | Fixed wings (rear flap only moves) | **Z-mode** (high downforce, cornering) and **X-mode** (low drag, straights) |
+| Passing help | DRS | **Overtake / boost mode**: extra electrical deployment for a car close to the one ahead (about 1s) **(verify exact rules)** |
+
+Telemetry implications:
+- Look for the **X-mode to Z-mode transitions** in speed/throttle/brake traces.
+- Straight-line speed is no longer a clean DRS-on vs DRS-off comparison. Mode usage, energy state and gap all interact.
+
+### 2.2 Power units
+
+- 1.6L V6 turbo hybrid stays
+- **MGU-H removed**
+- **MGU-K raised to about 350 kW** (from about 120 kW); electrical share of total power is close to 50% **(verify)**
+- Energy recovered per lap is capped (about 8.5 MJ) **(verify)**
+- **100% sustainable fuel**
+- Result: energy management is a first-class performance factor. Drivers lift/coast earlier, harvest in braking zones, and may see the car "run out of electrical power" at the end of long straights (often called **clipping** or **super-clipping**).
+
+Telemetry implications:
+- Speed drop-offs at the end of straights while still at full throttle
+- Different harvesting strategies per team in qualifying vs race
+- Lift-and-coast patterns that did not exist in this form before
+
+### 2.3 Chassis and tyres (approximate, verify)
+
+| Item | Direction of change |
+|---|---|
+| Wheelbase | Shorter (about 3400 mm) |
+| Width | Narrower (about 1900 mm) |
+| Minimum weight | Lighter (about 768 kg, revised during development) |
+| Floor / ground effect | Less ground-effect dependence, simpler floor |
+| Downforce and drag | Both reduced vs 2025 |
+| Tyres | Pirelli; narrower front and rear, 18-inch wheels retained |
+
+### 2.4 Other season context
+
+- Six sprint weekends were originally planned. Calendar changes later reduced the number of remaining sprints.
+- Bahrain and Saudi Arabia (April) were **cancelled** because of the Middle East conflict, cutting the calendar from 24 to 22. Bahrain was later reinstated at **Sepang, Malaysia** (non-sprint) **(verify date and result)**.
+- Madrid debuts as a new Spanish GP venue.
+
+---
+
+## 3. Teams, cars and drivers
+
+| Team | Chassis | Power unit | Drivers | Notes |
+|---|---|---|---|---|
+| Mercedes | F1 W17 | Mercedes | Russell, Antonelli | Season's dominant team |
+| Ferrari | SF-26 **(verify)** | Ferrari | Hamilton, Leclerc | Main challenger |
+| McLaren | MCL40 | Mercedes (customer) | Norris, Piastri | Defending champion Norris |
+| Red Bull Racing | RB22 **(verify)** | Red Bull-Ford | Verstappen, Hadjar | First own-built PU |
+| Racing Bulls | **(verify)** | Red Bull-Ford | Lawson, Lindblad | |
+| Alpine | A526 | Mercedes (customer) | Gasly, Colapinto | Switched from Renault PU |
+| Williams | FW48 | Mercedes (customer) | Albon, Sainz | |
+| Haas | **(verify)** | Ferrari (customer) | Ocon, Bearman | |
+| Audi | R26 **(verify)** | Audi | Hulkenberg, Bortoleto | Works team (ex-Sauber) |
+| Aston Martin | AMR26 **(verify)** | Honda | Alonso, Stroll | Works Honda return |
+| Cadillac | **(verify)** | Ferrari (customer) | Bottas, Perez | New 11th team |
+
+Power unit suppliers in 2026: **Mercedes, Ferrari, Honda, Audi, Red Bull-Ford**.
+
+---
+
+## 4. Championship snapshot (12 Oct 2026)
+
+Source: formula1.com results pages, retrieved 12 Oct 2026. Standings move every race weekend, so update the table below as the season finishes.
+
+### Constructors
+
+| Pos | Team | Pts |
+|---|---|---|
+| 1 | Mercedes | 578 |
+| 2 | Ferrari | 444 |
+| 3 | McLaren | 339 |
+| 4 | Red Bull Racing | 332 |
+| 5 | Racing Bulls | 100 |
+| 6 | Alpine | 68 |
+| 7 | Haas | 30 |
+| 8 | Audi | 23 |
+| 9 | Williams | 12 |
+| 10 | Aston Martin | 7 |
+| 11 | Cadillac | 0 |
+
+### Drivers (top 10)
+
+| Pos | Driver | Team | Pts |
+|---|---|---|---|
+| 1 | Kimi Antonelli | Mercedes | 340 |
+| 2 | George Russell | Mercedes | 238 |
+| 3 | Lewis Hamilton | Ferrari | 229 |
+| 4 | Max Verstappen | Red Bull | 221 |
+| 5 | Charles Leclerc | Ferrari | 215 |
+| 6 | Lando Norris | McLaren | 201 |
+| 7 | Oscar Piastri | McLaren | 138 |
+| 8 | Isack Hadjar | Red Bull | 97 |
+| 9 | Liam Lawson | Racing Bulls | 75 |
+| 10 | Pierre Gasly | Alpine | 41 |
+
+### Remaining races (as of snapshot, verify dates)
+
+Austin (25 Oct), Mexico, Brazil, Las Vegas (21 Nov), Qatar, Abu Dhabi.
+
+### Final result (fill in at season end)
+
+- World Drivers' Champion: _TBD_
+- World Constructors' Champion: _TBD_
+- Notable stories: _TBD_
+
+---
+
+## 5. Repository layout
+
+Suggested structure for the `2026/` folder inside the telemetry repo:
+
+```
+2026/
+├── README.md                  <- this file
+├── docs/
+│   ├── regulations.md         <- deeper notes on technical/sporting rules
+│   ├── season_log.md          <- race-by-race notes (see section 7)
+│   ├── insights.md            <- findings log (see section 8)
+│   └── glossary.md            <- terms (clipping, X-mode, etc.)
+├── data/
+│   ├── raw/                   <- untouched downloads (never edit)
+│   ├── interim/               <- cleaned/aligned data
+│   ├── processed/             <- analysis-ready tables (parquet/csv)
+│   └── external/              <- standings, calendar, regs PDFs
+├── notebooks/
+│   ├── 00_data_check.ipynb
+│   ├── 01_energy_deployment.ipynb
+│   ├── 02_active_aero_modes.ipynb
+│   └── ...
+├── src/
+│   ├── loaders.py             <- session loading and caching
+│   ├── features.py            <- lap/corner/straight feature extraction
+│   ├── plots.py               <- shared plot style
+│   └── utils.py
+├── projects/
+│   ├── energy_management/
+│   ├── overtake_mode/
+│   └── teammate_battles/
+├── reports/
+│   └── figures/
+└── environment.yml (or requirements.txt)
+```
+
+Conventions:
+- **Raw data is immutable.** Everything downstream must be reproducible from `raw/`.
+- Name notebooks with a numeric prefix and keep one question per notebook.
+- Save figures with the session key in the filename, e.g. `2026_R17_SIN_Q_ANT_vs_RUS.png`.
+- Record library versions (see section 9) because APIs and channel names change.
+
+---
+
+## 6. Data sources
+
+| Source | Use | Notes |
+|---|---|---|
+| FastF1 (Python) | Timing, telemetry, weather, race control | Verify it exposes 2026 sessions and any new channels (energy, aero mode) |
+| OpenF1 API | Live/recent timing and car data | Alternative/cross-check |
+| formula1.com results | Official standings and results | Source for section 4 |
+| FIA documents | Regulations, stewards' decisions, classification | Treat as authoritative |
+| Jolpica / Ergast-compatible API | Historical results | For comparisons with 2014-2025 |
+
+Open question to settle early: **which channels actually exist for the new energy and aero systems?** If the public feeds do not expose battery state or wing mode, those must be **inferred** from speed, throttle, brake and acceleration. Document the inference method in `docs/regulations.md` so future you knows it is derived, not measured.
+
+---
+
+## 7. Season log template
+
+Keep `docs/season_log.md` with one entry per round:
+
+```
+### R17: Singapore GP (9-11 Oct 2026) [sprint]
+- Winner / podium:
+- Pole:
+- Key story:
+- Strategy notes (stops, tyre compounds):
+- Reliability / DNFs:
+- Rules or technical talking point:
+- Standings after race:
+- Data loaded? (Q / R / SQ / S): ☐ ☐ ☐ ☐
+- Notebook(s) produced:
+```
+
+Filling this in as the season runs is far easier than reconstructing it later.
+
+---
+
+## 8. Insights log
+
+`docs/insights.md` is the long-term payoff. Each entry should be self-contained:
+
+```
+## [YYYY-MM-DD] Short title
+**Question:**
+**Data / sessions used:**
+**Method:**
+**Finding:**
+**Confidence:** low / medium / high
+**Caveats:**
+**Figure:** reports/figures/...
+**Follow-ups:**
+```
+
+Examples of questions worth recording:
+- Did Mercedes' advantage come from power unit, aero efficiency, or energy management?
+- How did Ferrari's race pace trend across the season relative to Mercedes?
+- How much did Antonelli's gap to Russell vary by track type (street, high-speed, low-grip)?
+- Was overtaking harder or easier than under DRS? (Compare on-track passes per race vs 2022-2025.)
+- Which teams improved most from pre-season testing to the final race?
+
+---
+
+## 9. Project roadmap
+
+### Tier 1: foundation
+1. **Data pipeline:** cache all 2026 sessions locally; check completeness per round.
+2. **Calendar and results tables:** one clean table for races, qualifying, sprints.
+3. **Baseline pace model:** fuel-corrected, tyre-corrected lap times per team/driver.
+
+### Tier 2: the new-rules analyses
+4. **Energy deployment / clipping detector:** find where full-throttle cars lose acceleration at the end of straights; compare teams and drivers.
+5. **Active aero mode inference:** estimate X-mode/Z-mode from drag and speed behaviour.
+6. **Overtake-mode effectiveness:** gap closed over a straight vs gap and deployment.
+7. **Lift-and-coast map per circuit:** where drivers harvest energy.
+
+### Tier 3: storytelling
+8. **Teammate battles:** Antonelli vs Russell, Hamilton vs Leclerc, Norris vs Piastri.
+9. **Development curves:** upgrade impact per team across the season.
+10. **Reset vs stability:** compare the 2026 pecking order with 2022-2025.
+11. **Season retrospective:** final report written after Abu Dhabi.
+
+---
+
+## 10. Environment and reproducibility
+
+- Pin Python and key library versions (FastF1, pandas, numpy, matplotlib/plotly).
+- Keep a `data/raw/MANIFEST.md` listing what was downloaded, when and from where.
+- Note the date each dataset was pulled. Public timing data is sometimes corrected after the fact.
+- Commit notebooks with outputs cleared (or use `nbstripout`) and export key figures to `reports/figures/`.
+
+---
+
+## 11. Glossary
+
+- **Active aero:** movable front and rear wing elements that change the car's downforce/drag during a lap.
+- **X-mode / Z-mode:** low-drag (straights) / high-downforce (corners) configurations.
+- **Overtake / boost mode:** extra electrical deployment available to a car close behind another.
+- **MGU-K:** motor-generator unit on the crankshaft that harvests braking energy and deploys it.
+- **MGU-H:** heat-recovery unit; **removed** for 2026.
+- **Clipping:** car stops accelerating strongly at high speed because electrical deployment has ended.
+- **Lift-and-coast:** lifting off the throttle before braking to harvest energy or save fuel.
+- **Customer PU:** engine supplied by another manufacturer (e.g. McLaren, Williams and Alpine use Mercedes).
+
+---
+
+## 12. Changelog
+
+| Date | Change |
+|---|---|
+| 2026-10-12 | Initial README created; standings snapshot after Singapore weekend |
